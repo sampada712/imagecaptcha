@@ -1,0 +1,295 @@
+.refresh_str, .default_str, .picatcha_question_str, .picatcha_translated_str{
+  font-size:14px;
+/*  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", Helvetica, Arial, sans-serif;
+  color:#333; */
+}
+.picatcha_translated_str b{
+  padding-left: 3px;
+}
+.refresh_str{
+  position:absolute;
+  top:0px;
+  left:0px;
+  background-color:#ffff05;
+  width:100%;
+  border-radius:3px;
+  padding: 3px 0px;
+}
+
+#picatcha_table .picatcha_td div label{
+  line-height:1.0em;
+}
+
+p.picatcha_question {
+  margin:0;
+  font-size:100%;
+  text-align:center;
+}
+span.picatcha_question_str {font-weight:bold;}
+span.picatcha_step {font-size:80%;}
+.picatcha table {width:auto;}
+#picatcha table {border:none;}
+.picatcha td {
+  width: initial;
+  height: initial;
+  padding:2px;
+  border:none;
+  text-align:center;
+  vertical-align:top;
+}
+#picatcha tr td{
+/*  might be possible to merge this with .picatcha td to form #picatcha tr td*/
+  padding:0px;
+  margin:0px;
+}
+.picatcha .img_btn {
+  border:2px solid #EBEBEB;
+  border-radius:8px;
+  font-size:12px;
+  overflow:hidden;
+  margin:1px;
+}
+.picatcha .img_btn:hover {
+  border-color:#300;
+}
+.picatcha .img_btn.selected {
+  opacity: 0.5;
+  border-color:#333;
+  background-color:#ccc;
+}
+.picatcha input[type=checkbox] {
+  display:none; 
+  height:75px; 
+  width:75px;
+}
+
+.picatcha_link {
+	float:left;
+  padding-left:5px;
+  text-align: left;
+  font-size:11px;
+  background-color: #fdf6e5;
+}
+
+#container, #captcha {
+  margin: auto;
+}
+
+.image {
+  width: 77px;
+  height: 77px;
+}
+
+.formItem {
+display:block;
+}
+
+ul.thumbs {
+	clear: both;
+	margin: 0;
+	padding: 0;
+}
+ul.thumbs li {
+	float: left;
+	padding: 0;
+	margin: 2px 4px 2px 0;
+	list-style: none;
+}
+ul.thumbs li.selected a.thumb {
+	background: #000;
+}
+a.thumb:focus {
+	outline: none;
+}
+ul.thumbs .image-select {
+	border: none;
+	display: block;
+	padding: 2px;
+	display: block;
+	border: 1px solid #ccc;
+	cursor:pointer;
+	height:77px;
+	width:77px;
+}
+div.pagination {
+	clear: both;
+}
+div.navigation div.top {
+	margin-bottom: 12px;
+	height: 11px;
+}
+div.navigation div.bottom {
+	margin-top: 12px;
+}
+div.pagination a, div.pagination span.current, div.pagination span.ellipsis {
+	display: block;
+	float: left;
+	margin-right: 2px;
+	padding: 4px 7px 2px 7px;
+	border: 1px solid #ccc;
+}
+div.pagination a:hover {
+	background-color: #eee;
+	text-decoration: none;
+}
+div.pagination span.current {
+	font-weight: bold;
+	background-color: #000;
+	border-color: #000;
+	color: #fff;
+}
+div.pagination span.ellipsis {
+	border: none;
+	padding: 5px 0 3px 2px;
+}
+#captionToggle a {
+	float: right;
+	display: block;
+	background-image: url('caption.png');
+	background-repeat: no-repeat;
+	background-position: right;
+	margin-top: 5px;
+	padding: 5px 30px 5px 5px;
+}
+
+#picturesque
+{
+	width:350px;	
+}
+.picatcha_li_div{
+    height:0px;
+}
+
+ul.thumb {
+	float: left;
+	list-style: none;
+	margin: 0; padding: 10px;
+	width: 350px;
+}
+ul.thumb li {
+	margin: 0; padding: 5px;
+	float: left;
+	position: relative;
+	width: 77px;
+	height: 77px;
+}
+ul.thumb li img {
+	width: 100px; height: 100px;
+	border: 1px solid #ddd;
+	padding: 5px;
+	background: #f0f0f0;
+	position: absolute;
+	left: 0; top: 0;
+	-ms-interpolation-mode: bicubic; 
+}
+ul.thumb li img.hover {
+	background:url(thumb_bg.png) no-repeat center center;
+	border: none;
+}
+
+.picatchaRefreshButton{
+	border:1px solid #2A1F19;
+	background-color:#2A1F19;
+	padding:0px 3px;
+	border-radius: 4px 0 0px 0px;
+	color:white;
+	cursor:pointer;
+	text-shadow:black 0px 0px 0px;
+	font: 0.8em Arial,sans-serif;
+	position:absolute;
+	bottom:0px;
+	right:0px;
+}
+
+.picatchaAudioButton{
+	border:1px solid #2A1F19;
+	background-color:#2A1F19;
+	padding:0px 3px;
+	border-radius: 0px 4px 0px 4px;
+	color:white;
+	cursor:pointer;
+	text-shadow:black 0px 0px 0px;
+	font: 0.8em Arial,sans-serif;
+	position:absolute;
+	top:0px;
+	right:0px;
+}
+
+#picatcha_audio_widget {
+	margin-top: 10px; 
+}
+
+#picatcha_audio_input {
+	border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  padding-left: 0px;
+  width:140px;
+  height: 20px;
+  border-radius: 2px 2px;
+  font-size: 18px;
+  margin-top: 14px;
+}
+
+audio {
+  background-color: #95B9C7;
+}
+
+#picatcha_div_preview{
+	position:absolute;
+	display:none;
+	color:#fff;
+  }
+#picatcha_div_preview img{
+  background-color:white;
+  border-radius:8px;
+}
+  
+#picatcha_table{
+  padding:0px;
+  margin:0px;
+  border-collapse:separate;
+
+}
+
+#picatcha #picatcha_table label{
+  padding:0px;
+  margin:0px;
+  font-size:100%;
+  width: inherit;
+  height: inherit;
+  display: inline-block;
+}
+
+#picatcha{
+  margin-top:0px;
+  margin-bottom:10px;
+  line-height:1;
+  position:relative;
+  width:350px; /*just give it an initial width...*/
+  background-color:white;
+  border-radius: 4px;
+  border: 1px solid white;
+  padding:0px 10px 20px 10px;
+  clear:both;
+}
+#picatchaSelectLanguage{
+  display:block;
+  clear:both;
+  font-size:10px;
+}
+.img_preview{
+  max-width:inherit;
+}
+
+.picatcha_ad_str {
+	text-align: left;
+}
+#picatcha a#picatcha_mini_top_link{
+  font-size:9px;
+  display:block;
+  text-align:center;
+  margin:0px -10px;
+  padding-bottom:2px;
+  text-decoration:none;
+}

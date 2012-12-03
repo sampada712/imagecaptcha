@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.cts.ms.higheredu.imagecaptcha.dao.CaptchaUser"
+		table="CAPTCHA_USER">
+		<id name="userId" type="long" column="USER_ID">
+			<generator class="assigned" />
+		</id>
+
+		<property name="userName">
+			<column name="USER_NAME" />
+		</property>
+		<property name="password">
+			<column name="PASSWORD" />
+		</property>
+		<property name="emailId">
+			<column name="EMAIL_ID" />
+		</property>
+		<property name="publicKey">
+			<column name="PUBLIC_KEY" />
+		</property>
+		<property name="privateKey">
+			<column name="PRIVATE_KEY" />
+		</property>
+		<property name="companyName">
+			<column name="COMPANY_NAME" />
+		</property>
+	</class>
+</hibernate-mapping>
