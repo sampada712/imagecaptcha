@@ -128,9 +128,10 @@ public class CaptchaUtility {
 
 		javax.mail.Session session = javax.mail.Session.getDefaultInstance(
 				props, new javax.mail.Authenticator() {
+					//TODO- put your gmail id and password
 					protected PasswordAuthentication getPasswordAuthentication() {
-						return new PasswordAuthentication("sampada712",
-								"1F$F1Nid#7");
+						return new PasswordAuthentication("username",
+								"password");
 					}
 				});
 

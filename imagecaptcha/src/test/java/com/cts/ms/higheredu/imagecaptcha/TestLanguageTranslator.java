@@ -7,9 +7,9 @@ public class TestLanguageTranslator {
 	public static void main1(String[] args) {
 		// Set your Windows Azure Marketplace client info - See
 		// http://msdn.microsoft.com/en-us/library/hh454950.aspx
-		Translate.setClientId("429d091a-32bf-4349-951f-62ab61cbf577");
+		Translate.setClientId("clientId");
 		Translate
-				.setClientSecret("fncLn0BDMvMOIWeaTmI6x7dN81TzLnvYtnkon1MRxc4=");
+				.setClientSecret("Secret");
 
 		String translatedText;
 		try {
