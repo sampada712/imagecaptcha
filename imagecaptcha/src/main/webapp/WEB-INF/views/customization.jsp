@@ -9,9 +9,8 @@
 	<c:when test="${mobile}">
 		<link href="/imagecaptcha/resources/css/default-mobile.css"
 			rel="stylesheet" type="text/css" />
-		<!-- TODO: add logic for iPad -->
 		<meta name="viewport"
-			content="width=device-width, initial-scale:1.0, minimum-scale:1.0, maximum-cale:1.0" />
+			content="width=device-width, initial-scale:1.0, minimum-scale:1.0, maximum-scale:1.0" />
 	</c:when>
 	<c:otherwise>
 		<link href="/imagecaptcha/resources/css/default.css" rel="stylesheet"
@@ -20,7 +19,7 @@
 </c:choose>
 <c:if test="${ipad}">
 	<meta name="viewport"
-		content="width=device-width, initial-scale:1.0, minimum-scale:1.0, maximum-cale:1.0" />
+		content="width=device-width, initial-scale:1.0, minimum-scale:1.0, maximum-scale:1.0" />
 </c:if>
 <link href="/imagecaptcha/resources/css/captcha.css" rel="stylesheet"
 	type="text/css" />
@@ -264,7 +263,6 @@ tr {
 									class="leftIndent">Noise Type:</label>
 							</span> <span class="halfContent"> <select id="nt">
 										<option value="0">Random</option>
-										<option value="1">Shadow</option>
 										<option value="2">Pixelation</option>
 								</select>
 							</span> <br /> <br />

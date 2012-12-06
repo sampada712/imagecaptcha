@@ -35,7 +35,7 @@ var JSON;if(!JSON){JSON={}}(function(){'use strict';function f(n){return n<10?'0
 var Picatcha = {
     TOTAL_STAGES: 1,
     API_SERVER: 'http://192.168.1.5:8080',
-    PUBLIC_KEY: '',
+    PUBLIC_KEY: 'test',
     FORMAT: '2',
     STYLE: '#2a1f19',
     LINK: '1',
@@ -84,7 +84,7 @@ var Picatcha = {
         var tes= navigator.userAgent.match(/(Mobile|Android|BlackBerry|iPhone|iPad|Windows Phone)/);
         if(RegExp('/Mobile|Android|BlackBerry|iPhone|iPad|Windows Phone/').test(navigator.appVersion)){
             if(Picatcha.IMG_SIZE==75){
-                Picatcha.IMG_SIZE='50';
+                Picatcha.IMG_SIZE='60';
             }
             Picatcha.MOBILE = true;
         }
@@ -131,11 +131,11 @@ var Picatcha = {
             lang='en';
         }
         
-        /*if(lang=="en"){
+        if(lang=="en"){
             $P('.default_str').css("display","inline-block");
             $P('.picatcha_question_str').css("display","inline-block");
             $P('.picatcha_translated_str').css("display","none");
-        }else{*/
+        }else{
             string = $P('.picatcha_question_str').html();
             $P.ajax({
                 // be sure to change this for the dev or production server!
@@ -150,7 +150,7 @@ var Picatcha = {
                     "<b>"+data.translations[0].category+"</b>";
                 }
             });
-        //}
+        }
     },
     _init_build_html: function () {
         var html, question;
@@ -209,7 +209,9 @@ var Picatcha = {
         url = Picatcha.API_SERVER + '/imagecaptcha/getChallenge';
         Picatcha.elm.find('.refresh_str').text("Refresh if you do not see any image ");
         Picatcha.elm.find('.refresh_str').css('display', 'block');
-
+        $P('.default_str').css("display","inline-block");
+        $P('.picatcha_question_str').css("display","inline-block");
+        $P('.picatcha_translated_str').css("display","none");
         $P.ajax({
             url: url,
             data: data,
@@ -219,8 +221,12 @@ var Picatcha = {
                 // Picatcha.IMG_SIZE = data.is;
                 
                 Picatcha.challenge_data = data;
+                if(data.error!='undefined' && data.error==true){
+             	   Picatcha._show_error('Oops, some minor issue! Please press the refresh button to generate the CAPTCHA ');
+             	   return;
+                }
                 Picatcha.total_stages_num = data.s.length;
-
+                
                 // Set default str and removing the refresh str
                 Picatcha.elm.find('.refresh_str').text("");
                 Picatcha.elm.find('.default_str').text("Select ALL the images of ");
@@ -245,13 +251,6 @@ var Picatcha = {
                     $P(window).resize(function(){Picatcha.responsiveWidth()});
                 }
                 
-
-                // change the color of the powered by link if it ends up
-				// white...
-                // if($P('.picatcha_link a').css('color')=="rgb(255, 255,
-				// 255)"){$('.picatcha_link a').css('color','#333')}
-
-                Picatcha.trackUsage.setup();
 
                 // translate, if necessary
                 if(typeof PicatchaOptions !='undefined' && PicatchaOptions.lang!='en'){
@@ -331,82 +330,6 @@ var Picatcha = {
         Picatcha.elm.find('.picatcha_mesg').text(mesg);
         // TODO hide rest elements
     },
-    wordpressHelper: function(){
-        // Wordpress Helper replaced by a button to validate keys
-        // But keeping it here in case of a future need
-        // code to enable the API key check on wordpress installations
-        // for jQuery 1.6.x and earlier
-        // $P('#picatchaPublicKey').bind('blur',
-		// function(event){Picatcha.clientKeyCheck(this.value,'pub')});
-        // $P('#picatchaPrivateKey').bind('blur',
-		// function(event){Picatcha.clientKeyCheck(this.value,'pri')});
-        // for jQuery 1.7 and later
-        // $P('#picatchaPublicKey').on('blur',
-		// function(event){Picatcha.clientKeyCheck(this.value,'pub')});
-        // $P('#picatchaPrivateKey').on('blur',
-		// function(event){Picatcha.clientKeyCheck(this.value,'pri')});
-    },
-    wpCheckKeysBtn: function(){
-        if($P('#picatchaPublicKey').val()!=''){
-            Picatcha.clientKeyCheck($P('#picatchaPublicKey').val(), 'pub');
-        }else{
-            jQuery('#validpubKey').empty();
-        }
-        if($P('#picatchaPrivateKey').val()!=''){
-            Picatcha.clientKeyCheck($P('#picatchaPrivateKey').val(), 'pri');
-        }else{
-            jQuery('#validpriKey').empty();
-        }
-    },
-    // Begin Joomla JavaScript Additions
-    joomlaHelper: function(){
-        // helper to set up functionality of the joomla admin back-end
-        // attach key checking to the Validate button
-        jQuery('#PicatchaKeyValidationCheck').bind('click',function(event){Picatcha.jCheckKeysBtn()});
-    },
-    jCheckKeysBtn: function(){
-        picatchaKeysToCheck =new Array();
-        if(jQuery('#jform_params_picatchaPublicKey').val()){
-            picatchaKeysToCheck.push(['pub',jQuery('#jform_params_picatchaPublicKey').val()]);
-        }
-        if(jQuery('#jform_params_picatchaPrivateKey').val()){
-            picatchaKeysToCheck.push(['pri',jQuery('#jform_params_picatchaPrivateKey').val()]);
-        }
-        for (k=0; k<picatchaKeysToCheck.length; k++){
-            this.joomlaClientKeyCheck(picatchaKeysToCheck[k][1],picatchaKeysToCheck[k][0]);
-        }
-    },
-    joomlaClientKeyCheck: function(key,type){
-        jQuery.ajax({
-            url:this.API_SERVER+'/vk?'+picatchaKeysToCheck[k][0]+'='+picatchaKeysToCheck[k][1],
-            dataType:'jsonp',
-            jsonpCallback: 'keyHandler'+picatchaKeysToCheck[k][0],
-            success:function(data){
-                keyType={'pub':'Public','pri':'Private'};
-                if(data.s==true){
-                    jQuery('#jform_params_picatcha'+keyType[type]+'Key').css('color','green');
-                }else{
-                    jQuery('#jform_params_picatcha'+keyType[type]+'Key').css('color','red');
-                }
-            }
-        });
-    },
-    clientKeyCheck: function(key, type){
-        // client key check function.
-        jQuery.ajax({
-            url:this.API_SERVER+'/vk?'+type+'='+key,
-            dataType:'jsonp',
-            jsonpCallback: 'keyHandler'+type,
-            success:function(data){
-                if(data.s==true){
-                    jQuery('#valid'+type+'Key').html('<span style="color:green;">Valid</span>');
-                }else{
-                    jQuery('#valid'+type+'Key').html('<span style="color:red;">Invalid!</span>');
-                }
-            }
-        });
-    },
-    // End Joomla JavaScript Additions
 
     imagePreview: function(){
         $P("span.picatcha_preview").live('mouseenter', function(e){
@@ -483,48 +406,8 @@ var Picatcha = {
         var width = parseInt($P('#picatcha').css('width').slice(0,-2));
         var imageSize = (parseInt(Picatcha.IMG_SIZE)+4);
         
-        $P('#picatcha_table').css('width',Math.floor(width/imageSize)*imageSize);
+        $P('#picatcha_table').css('width',210);
+        $P('#picatcha').css('width',210);
     },
 
-    trackUsage: {
-        setup: function(){
-            // Set up the basic information about the stage
-            this.data['Category']=$P('.picatcha_question_str').html().replace(/ /g,'_');
-            this.data['Token']=$P('.picatcha_token').val();
-            this.data['allEvents']=[];
-            this['mousePositions']=[];
-            this['position'] = $P('#picatcha').offset();
-            // add all the event listeners here
-            $P('#picatcha').mouseenter(function(){Picatcha.trackUsage['timer'] = setInterval("Picatcha.trackUsage.timedPosition()", 100)});
-            $P('#picatcha').mouseleave(function(){clearTimeout(Picatcha.trackUsage['timer']);});
-            $P('#picatcha').mouseup(function(event){Picatcha.trackUsage.data.allEvents.push(['click',event.pageX-Picatcha.trackUsage.position.left,event.pageY-Picatcha.trackUsage.position.top])});
-            $P('#picatcha').mousemove(function(event){Picatcha.trackUsage.mousePositions.push([event.pageX-Picatcha.trackUsage.position.left,event.pageY-Picatcha.trackUsage.position.top])});
-
-            // Attach a listener to post the data when the user submits
-            $P('#picatcha').parent().find('[type|="submit"]').mousedown(function(){Picatcha.trackUsage.sendData()});
-        },
-        widgetEvent:function(id, type){
-            d = new Date();
-            this.data['allEvents'].push({'type':type,'id':id,'timestamp':d});
-        },
-        timedPosition: function(){
-            index = this['mousePositions'].length - 1;
-            this.data.allEvents.push(this.mousePositions[index]);
-        },
-        // where all the data is stored
-        data:{},
-        sendData: function(){
-            // when the page is unloaded or picatcha refreshed, send the data to
-			// the server
-            $P.ajax({
-                url:Picatcha.API_SERVER+'/v1/tracking',
-                data: {data:JSON.stringify(this.data)},
-                dataType:'jsonp',
-                jsonp:'callback',
-                jsonpCallback:'jsonpCallback',
-                success:function(data){
-                }
-            });
-        }
-    }
 };

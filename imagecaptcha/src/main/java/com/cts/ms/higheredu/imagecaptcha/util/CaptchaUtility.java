@@ -1,10 +1,6 @@
 package com.cts.ms.higheredu.imagecaptcha.util;
 
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -26,13 +22,14 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.imgscalr.Scalr;
 
 import com.cts.ms.higheredu.imagecaptcha.cache.CaptchaCache;
+import com.cts.ms.higheredu.imagecaptcha.dao.CaptchaUser;
+import com.cts.ms.higheredu.imagecaptcha.dao.CaptchaUserDao;
 import com.cts.ms.higheredu.imagecaptcha.dao.CategoryImages;
 import com.cts.ms.higheredu.imagecaptcha.dao.ImageCategory;
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import com.jhlabs.image.DiffuseFilter;
 
 public class CaptchaUtility {
 
@@ -84,32 +81,23 @@ public class CaptchaUtility {
 		// createImage(75);
 	}
 
-	public static String createImage(int imgSize, CategoryImages image2) {
+	public static String createImage(int imgSize, CategoryImages image2,
+			int noiseType) {
 		try {
 			File file = new File(image2.getImagePath());
-			Image image = (Image) ImageIO.read(file);
-			int thumbWidth = imgSize;
-			int thumbHeight = imgSize;
-
-			// Draw the scaled image
-			BufferedImage thumbImage = new BufferedImage(thumbWidth,
-					thumbHeight, BufferedImage.TYPE_INT_RGB);
-			Graphics2D graphics2D = thumbImage.createGraphics();
-			graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-					RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-			graphics2D.drawImage(image, 0, 0, thumbWidth, thumbHeight, null);
-
-			// Write the scaled image to the outputstream
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-			JPEGEncodeParam param = encoder
-					.getDefaultJPEGEncodeParam(thumbImage);
-			int quality = 100; // Use between 1 and 100, with 100 being highest
-								// quality
-			quality = Math.max(0, Math.min(quality, 100));
-			param.setQuality((float) quality / 100.0f, false);
-			encoder.setJPEGEncodeParam(param);
-			encoder.encode(thumbImage);
+			BufferedImage image = (BufferedImage) ImageIO.read(file);
+			BufferedImage thumbImage;
+			if (noiseType == 2) {
+				DiffuseFilter diffuseFilter = new DiffuseFilter();
+				diffuseFilter.setScale(1f);
+				thumbImage = Scalr.resize(image, Scalr.Method.SPEED,
+						Scalr.Mode.FIT_EXACT, imgSize, imgSize,
+						Scalr.OP_ANTIALIAS, diffuseFilter);
+			} else {
+				thumbImage = Scalr.resize(image, Scalr.Method.SPEED,
+						Scalr.Mode.FIT_EXACT, imgSize, imgSize,
+						Scalr.OP_ANTIALIAS);
+			}
 			RandomStr str = new RandomStr();
 			String imageName = str.get(12) + ".png";
 			ImageIO.write(thumbImage, "jpg", new File("C:/Images/" + imageName));
@@ -155,9 +143,9 @@ public class CaptchaUtility {
 			String htmlContent = "<html><h3>Hi "
 					+ username
 					+ ",</h3>"
-					+ "<p>Thanks for signing up with Captcha.</p> <p> Use Private key: "
-					+ privateKey + " and Public Key: " + publickey
-					+ " for accessing captcha API</p></html>";
+					+ "<p>Thanks for signing up with Captcha.</p> <p> Use Private key: <b>"
+					+ privateKey + " </b>and Public Key: <b>" + publickey
+					+ " </b>for accessing captcha API.</p></html>";
 			message.setContent(htmlContent, "text/html");
 			System.out.println("Sendinmessageg email ....");
 			Transport.send(message);
@@ -167,23 +155,35 @@ public class CaptchaUtility {
 	}
 
 	public static boolean validateCaptchaResponse(Locale locale,
-			HttpServletRequest request) {
+			HttpServletRequest request, boolean keyCheck) {
 		Date date = new Date();
 		String user_response[] = request
 				.getParameterValues("picatcha[r][s0][]");
 		String token = request.getParameter("picatcha[token]");
 		// validate private key
+		if (keyCheck) {
+			String publickKey = request.getParameter("k");
+			CaptchaUserDao dao = new CaptchaUserDao();
+			List<CaptchaUser> list = dao.findByPublicKey(publickKey);
+			if (list == null || list.isEmpty()) {
+				return false;
+			}
+		}
 		CaptchaResponse response = CaptchaCache.getInstance()
 				.getTokenImagesMap().get(token);
 		if (response == null || user_response == null) {
 			return false;
 		} else {
-			long diff = date.getTime() - response.getTimestamp().getTime();
-			if (diff > 36000) {
+			long diffInMins = Math.abs(date.getTime()
+					- response.getTimestamp().getTime()) / 60000;
+			if (diffInMins > 10) {
 				return false;
 			} else {
 				List<String> images = response.getTargetImages();
 				List<String> userResList = Arrays.asList(user_response);
+				if (userResList.size() != images.size()) {
+					return false;
+				}
 				for (String imageName : images) {
 					if (!userResList.contains(imageName)) {
 						return false;

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cts.ms.higheredu.imagecaptcha.dao.CaptchaUser;
+import com.cts.ms.higheredu.imagecaptcha.dao.CaptchaUserDao;
 import com.cts.ms.higheredu.imagecaptcha.util.CaptchaUtility;
 import com.memetix.mst.language.Language;
 import com.memetix.mst.translate.Translate;
@@ -42,30 +43,13 @@ public class CaptchaAjaxController {
 			Pattern pattern = Pattern.compile(USERNAME_PATTERN);
 			Matcher matcher = pattern.matcher(userId);
 			boolean isvalid = matcher.matches();
-			if (!isvalid || userId == "null") {
+			if (!isvalid || userId.equalsIgnoreCase("null")) {
 				map.put("code", "invalid-username");
 			} else {
-				Session session = null;
-				try {
-					SessionFactory sessionFactory = new Configuration()
-							.configure().buildSessionFactory();
-					session = sessionFactory.openSession();
-					Transaction txn = session.beginTransaction();
-
-					Query query = session.createQuery("from "
-							+ CaptchaUser.class.getName() + " where USER_NAME="
-							+ "'" + userId + "'");
-					List<CaptchaUser> list = query.list();
-					txn.commit();
-					if (list != null && !list.isEmpty()) {
-						map.put("taken", Boolean.TRUE.toString());
-					}
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
-				} finally {
-					// Actual contact insertion will happen at this step
-					session.flush();
-					session.close();
+				CaptchaUserDao dao = new CaptchaUserDao();
+				List<CaptchaUser> list = dao.findByUserName(userId);
+				if (list != null && !list.isEmpty()) {
+					map.put("taken", Boolean.TRUE.toString());
 				}
 			}
 		} else {
@@ -94,11 +78,15 @@ public class CaptchaAjaxController {
 				.setClientSecret("fncLn0BDMvMOIWeaTmI6x7dN81TzLnvYtnkon1MRxc4=");
 		try {
 			Map<String, Object> langMap = new HashMap<String, Object>();
+			Language dest = Language.fromString(lang);
+			if (!dest.equals(Language.ENGLISH)) {
+				/*cat = Translate.execute(cat, Language.ENGLISH,
+						Language.fromString(lang));
+				question = Translate.execute(question, Language.ENGLISH,
+						Language.fromString(lang));*/
 
-			/*String translatedText = Translate.execute(cat, Language.ENGLISH,
-					Language.fromString(lang));*/
-
-			langMap.put("category", "test");
+			}
+			langMap.put("category", cat);
 			langMap.put("question", question);
 			Object[] textArr = new Object[1];
 			textArr[0] = langMap;

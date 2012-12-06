@@ -14,7 +14,7 @@ public class CaptchaImpl implements Captcha {
 	private String privateKey;
 	private String publicKey;
 	private String captchaServer = HTTP_SERVER;
-	private String VERIFY_URL = captchaServer + "/v";
+	private String VERIFY_URL = captchaServer + "/validateChallenge";
 	private String elmid = "picatcha";
 	private HttpLoader httpLoader = new SimpleHttpLoader();
 
@@ -50,7 +50,7 @@ public class CaptchaImpl implements Captcha {
 
 		JSONObject fullParamJSON = new JSONObject(); // Full verify params in
 														// JSON
-		fullParamJSON.put("k", this.privateKey);
+		fullParamJSON.put("k", "eYlyez4k0vRehTNqQTif7asSp");
 		fullParamJSON.put("t", token);
 		fullParamJSON.put("r", response_json);
 		fullParamJSON.put("ip", ip);

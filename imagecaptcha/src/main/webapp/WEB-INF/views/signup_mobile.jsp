@@ -11,7 +11,7 @@
 <link href="/imagecaptcha/resources/css/captcha.css" rel="stylesheet"
 	type="text/css" />
 <meta name="viewport"
-	content="width=device-width, initial-scale:1.0, minimum-scale:1.0, maximum-scale:1.0" />
+	content="width=device-width, initial-scale:1.0, minimum-scale:1.0, maximum-cale:1.0" />
 </head>
 <body>
 
@@ -23,59 +23,43 @@
 				<p>Once you are successfully signed up, you will be emailed with
 					public/private keys.</p>
 				<p>
-					<label for="id_username">Username</label><span style="color: red">*</span> <input
-						id="id_username" type="text" name="username" maxlength="255"
-						required="required" />
+					<label for="id_username">Username:</label> <input id="id_username"
+						type="text" name="username" maxlength="255" />
 				</p>
 
 				<c:if test="${response.usernameError}">
 					<p>
 						<span style="color: red; position: relative; left: 90px;">Username
-							is invalid.</span>
+							is required.</span>
 					</p>
 				</c:if>
 
 				<p>
-					<label for="pass1">Password</label><span style="color: red">*</span> <input id="pass1"
-						type="password" name="password" maxlength="255"
-						required="required" />
+					<label for="pass1">Password:</label> <input id="pass1"
+						type="password" name="password" maxlength="255" />
 				</p>
-				<c:if test="${response.passwordError}">
-					<p>
-						<span style="color: red; position: relative; left: 90px;">Password
-							is invalid.</span>
-					</p>
-				</c:if>
 				<p>
-					<label for="pass2">Confirm Password</label><span style="color: red">*</span> <input
-						id="pass2" type="password" onkeyup="confirmPass(); return false;"
-						name="confrimpassword" maxlength="255" required="required" /> <span
-						id="confirmMessage" class="confirmMessage"></span>
+					<label for="pass2">Confirm Password:</label> <input id="pass2"
+						type="password" onkeyup="confirmPass(); return false;"
+						name="password" maxlength="255" /> <span id="confirmMessage"
+						class="confirmMessage"></span>
 				</p>
 
 				<p>
-					<label for="id_email">Email</label> <span style="color: red">*</span><input
-						id="id_email" type="text" name="email" maxlength="255"
-						required="required" />
+					<label for="id_email">Email:</label> <input id="id_email"
+						type="text" name="email" maxlength="255" />
 				</p>
 				<c:if test="${response.emailIdError}">
 					<p>
 						<span style="color: red; position: relative; left: 90px;">Email
-							Id is invalid.</span>
+							Id is required.</span>
 					</p>
 				</c:if>
 
 				<p>
-					<label for="id_website">Company Name</label><span style="color: red">*</span> <input
-						id="id_website" type="text" name="website" maxlength="255"
-						required="required" />
+					<label for="id_website">Company Name:</label> <input
+						id="id_website" type="text" name="website" maxlength="255" />
 				</p>
-				<c:if test="${response.companyError}">
-					<p>
-						<span style="color: red; position: relative; left: 90px;">Company
-							Name is invalid.</span>
-					</p>
-				</c:if>
 				<c:if test="${response.captchaError}">
 					<p>
 						<span style="color: red; position: relative; left: 90px;">Sorry,
@@ -83,7 +67,7 @@
 					</p>
 				</c:if>
 				<p>
-					<label for="pixcaptcha">Captcha</label><span name="pixcaptcha">
+					<label for="pixcaptcha">Captcha:</label><span name="pixcaptcha">
 						<script type="text/javascript"
 							src="/imagecaptcha/resources/js/captcha.js"></script>
 						<link rel="stylesheet" type="text/css"
@@ -96,7 +80,7 @@
 								Picatcha.IMG_SIZE = '75';
 								PicatchaOptions = {
 									'lang' : 'en',
-									langOverride : '0'
+									langOverride : '1'
 								}
 								window.onload = function() {
 									Picatcha.create('picatcha');
@@ -206,14 +190,12 @@
 		function checkPass() {
 			var ck_password = /^[A-Za-z0-9!@#$%^&*()_]{6,20}$/;
 			var pass1 = document.getElementById('pass1');
-			if (pass1.value != '') {
-				var message = $('#passMessage');
-				if (!ck_password.test(pass1.value)) {
-					message.css('color', '#FF6666').html(
-							'Please enter a valid Password.').slideDown();
-				} else {
-					message.css('display', 'none').slideUp();
-				}
+			var message = $('#passMessage');
+			if (!ck_password.test(pass1.value)) {
+				message.css('color', '#FF6666').html(
+						'Please enter a valid Password.').slideDown();
+			} else {
+				message.css('display', 'none').slideUp();
 			}
 		}
 
@@ -249,45 +231,42 @@
 			var emailID = document.getElementById('id_email');
 			var message = $('#emailMessage');
 			var str = emailID.value;
-			if (str != 'Example: Sampada'
-					&& str != 'Example: sampada@captcha.com') {
-				var at = "@";
-				var dot = ".";
-				var lat = str.indexOf(at);
-				var lstr = str.length;
-				var error = 'success';
-				if (str.indexOf(at) == -1) {
-					error = 'error';
-				}
-				if (str.indexOf(at) == -1 || str.indexOf(at) == 0
-						|| str.indexOf(at) == lstr) {
-					error = 'error';
-				}
-				if (str.indexOf(dot) == -1 || str.indexOf(dot) == 0
-						|| str.indexOf(dot) == lstr) {
-					error = 'error';
-				}
-				if (str.indexOf(at, (lat + 1)) != -1) {
-					error = 'error';
-				}
-				if (str.substring(lat - 1, lat) == dot
-						|| str.substring(lat + 1, lat + 2) == dot) {
-					error = 'error';
-				}
-				if (str.indexOf(dot, (lat + 2)) == -1) {
-					error = 'error';
-				}
-				if (str.indexOf(" ") != -1) {
-					error = 'error';
-				}
-				if (error == 'error') {
-					message.css('color', '#FF6666').html('Invalid E-mail ID')
-							.slideDown();
-				} else {
-					message.css('display', 'none').slideUp();
-				}
+			var at = "@";
+			var dot = ".";
+			var lat = str.indexOf(at);
+			var lstr = str.length;
+			var ldot = str.indexOf(dot);
+			var error = 'success';
+			if (str.indexOf(at) == -1) {
+				error = 'error';
 			}
-
+			if (str.indexOf(at) == -1 || str.indexOf(at) == 0
+					|| str.indexOf(at) == lstr) {
+				error = 'error';
+			}
+			if (str.indexOf(dot) == -1 || str.indexOf(dot) == 0
+					|| str.indexOf(dot) == lstr) {
+				error = 'error';
+			}
+			if (str.indexOf(at, (lat + 1)) != -1) {
+				error = 'error';
+			}
+			if (str.substring(lat - 1, lat) == dot
+					|| str.substring(lat + 1, lat + 2) == dot) {
+				error = 'error';
+			}
+			if (str.indexOf(dot, (lat + 2)) == -1) {
+				error = 'error';
+			}
+			if (str.indexOf(" ") != -1) {
+				error = 'error';
+			}
+			if (error == 'error') {
+				message.css('color', '#FF6666').html('Invalid E-mail ID')
+						.slideDown();
+			} else {
+				message.css('display', 'none').slideUp();
+			}
 		}
 	</script>
 </body>

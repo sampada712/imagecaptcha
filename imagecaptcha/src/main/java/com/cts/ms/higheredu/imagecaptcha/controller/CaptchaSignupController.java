@@ -2,7 +2,10 @@ package com.cts.ms.higheredu.imagecaptcha.controller;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.cts.ms.higheredu.imagecaptcha.dao.CaptchaUser;
+import com.cts.ms.higheredu.imagecaptcha.dao.CaptchaUserDao;
 import com.cts.ms.higheredu.imagecaptcha.util.CaptchaSignUpResponse;
 import com.cts.ms.higheredu.imagecaptcha.util.CaptchaUtility;
 import com.cts.ms.higheredu.imagecaptcha.util.RandomStr;
@@ -44,26 +48,33 @@ public class CaptchaSignupController {
 			String username = request.getParameter("username");
 			String emailId = request.getParameter("email");
 			String password = request.getParameter("password");
+			String confirmPassword = request.getParameter("confrimpassword");
 			String companyName = request.getParameter("website");
 			response.setUsername(username);
 			response.setEmailId(emailId);
 			response.setCompanyName(companyName);
 			// validate captcha response
 			boolean isValid = CaptchaUtility.validateCaptchaResponse(locale,
-					request);
+					request, false);
 			if (!isValid) {
 				response.setCaptchaError(true);
 			}
 			if (username == null || username.isEmpty()
-					|| username.equals("Example: Sampada")) {
+					|| username.equalsIgnoreCase("Example: Sampada")
+					|| !isValidUsername(username)) {
+				response.setUsernameError(true);
+			}
+			if (password == null || password.isEmpty()
+					|| !password.equals(confirmPassword)) {
 				response.setUsernameError(true);
 			}
 			if (emailId == null || emailId.isEmpty()
-					|| emailId.equals("Example: sampada@captcha.com")) {
+					|| emailId.equalsIgnoreCase("Example: sampada@captcha.com")
+					|| !isValidEmail(emailId)) {
 				response.setEmailIdError(true);
 			}
 			if (companyName == null || companyName.isEmpty()
-					|| companyName.equals("Example: www.captcha.com")) {
+					|| companyName.equalsIgnoreCase("Example: www.captcha.com")) {
 				response.setCompanyError(true);
 			}
 			model.addAttribute("response", response);
@@ -105,4 +116,27 @@ public class CaptchaSignupController {
 		}
 
 	}
+
+	private static boolean isValidEmail(String email) {
+		Pattern pattern = Pattern.compile(".+@.+\\.[a-z]+");
+		Matcher matcher = pattern.matcher(email);
+		return matcher.matches();
+	}
+
+	private boolean isValidUsername(String userId) {
+		Pattern pattern = Pattern.compile("^[a-z0-9_-]{3,15}$");
+		Matcher matcher = pattern.matcher(userId);
+		boolean isvalid = matcher.matches();
+		if (!isvalid || userId.equalsIgnoreCase("null")) {
+			return false;
+		} else {
+			CaptchaUserDao dao = new CaptchaUserDao();
+			List<CaptchaUser> list = dao.findByUserName(userId);
+			if (list != null && !list.isEmpty()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 }
