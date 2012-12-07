@@ -4,11 +4,11 @@
 <html>
 <head>
 <meta name="viewport"
-	content="width=device-width, initial-scale:1.0, minimum-scale:1.0, maximum-cale:1.0" />
+	content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
 </head>
 
 
-<body>
+<body style="width:550px;">
 	<form action="validateChallenge" method="post">
 		<h2>Image Captcha Demo</h2>
 		<%

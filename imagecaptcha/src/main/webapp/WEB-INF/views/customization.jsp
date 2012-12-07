@@ -10,7 +10,7 @@
 		<link href="/imagecaptcha/resources/css/default-mobile.css"
 			rel="stylesheet" type="text/css" />
 		<meta name="viewport"
-			content="width=device-width, initial-scale:1.0, minimum-scale:1.0, maximum-scale:1.0" />
+			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
 	</c:when>
 	<c:otherwise>
 		<link href="/imagecaptcha/resources/css/default.css" rel="stylesheet"
@@ -19,7 +19,7 @@
 </c:choose>
 <c:if test="${ipad}">
 	<meta name="viewport"
-		content="width=device-width, initial-scale:1.0, minimum-scale:1.0, maximum-scale:1.0" />
+			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
 </c:if>
 <link href="/imagecaptcha/resources/css/captcha.css" rel="stylesheet"
 	type="text/css" />
@@ -192,7 +192,7 @@ tr {
 					<link rel="stylesheet" type="text/css"
 						href="/imagecaptcha/resources/css/captcha.css" />
 					<script>
-						Picatcha.API_SERVER = 'http://192.168.1.5:8080'; //change these later to the settings_web.py or whatever
+						Picatcha.API_SERVER = 'http://192.168.1.215:8080'; //change these later to the settings_web.py or whatever
 						Picatcha.PUBLIC_KEY = 'test'; //change to settings.py
 						Picatcha.FORMAT = '2';
 						Picatcha.IMG_SIZE = '75';

@@ -67,7 +67,7 @@ public class CaptchaAjaxController {
 	Map<String, Object> translate(Locale locale, Model model,
 			HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		String question = "Select ALL the images of";
+		String question = "Select all the images containing one or more of: ";
 		String lang = request.getParameter("lang");
 		String cat = request.getParameter("str");
 
@@ -80,10 +80,10 @@ public class CaptchaAjaxController {
 			Map<String, Object> langMap = new HashMap<String, Object>();
 			Language dest = Language.fromString(lang);
 			if (!dest.equals(Language.ENGLISH)) {
-				/*cat = Translate.execute(cat, Language.ENGLISH,
+				cat = Translate.execute(cat, Language.ENGLISH,
 						Language.fromString(lang));
 				question = Translate.execute(question, Language.ENGLISH,
-						Language.fromString(lang));*/
+						Language.fromString(lang));
 
 			}
 			langMap.put("category", cat);

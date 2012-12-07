@@ -10,7 +10,7 @@ import org.json.simple.parser.JSONParser;
 
 public class CaptchaImpl implements Captcha {
 
-	public static final String HTTP_SERVER = "http://192.168.1.5:8080";
+	public static final String HTTP_SERVER = "http://192.168.1.215:8080";
 	private String privateKey;
 	private String publicKey;
 	private String captchaServer = HTTP_SERVER;

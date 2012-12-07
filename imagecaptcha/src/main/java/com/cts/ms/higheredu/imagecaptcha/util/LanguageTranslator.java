@@ -7,10 +7,9 @@ public class LanguageTranslator {
 
 	public static String getTranslatedString(String text, Language source,
 			Language destination) {
-		//set your API client id and secret
-		Translate.setClientId("clientId");
+		Translate.setClientId("429d091a-32bf-4349-951f-62ab61cbf577");
 		Translate
-				.setClientSecret("secret");
+				.setClientSecret("fncLn0BDMvMOIWeaTmI6x7dN81TzLnvYtnkon1MRxc4=");
 		String translatedText;
 		try {
 			translatedText = Translate.execute(text, source, destination);

@@ -34,7 +34,7 @@ var JSON;if(!JSON){JSON={}}(function(){'use strict';function f(n){return n<10?'0
 
 var Picatcha = {
     TOTAL_STAGES: 1,
-    API_SERVER: 'http://192.168.1.5:8080',
+    API_SERVER: 'http://192.168.1.215:8080',
     PUBLIC_KEY: 'test',
     FORMAT: '2',
     STYLE: '#2a1f19',
@@ -81,7 +81,9 @@ var Picatcha = {
         navigator.appVersion.search('MSIE 6.0') > 0 || document.documentMode<9;
         
         // check if mobile, if so, do stuff:
-        var tes= navigator.userAgent.match(/(Mobile|Android|BlackBerry|iPhone|iPad|Windows Phone)/);
+
+        var mobile= navigator.userAgent.match(/(Android|BlackBerry|iphone|Windows Phone)/);
+//        var mobile= navigator.userAgent.match(/(Mobile|Android|BlackBerry|Windows Phone)/);
         if(RegExp('/Mobile|Android|BlackBerry|iPhone|iPad|Windows Phone/').test(navigator.appVersion)){
             if(Picatcha.IMG_SIZE==75){
                 Picatcha.IMG_SIZE='60';

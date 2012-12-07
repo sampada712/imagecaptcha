@@ -10,8 +10,8 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
 <link href="/imagecaptcha/resources/css/captcha.css" rel="stylesheet"
 	type="text/css" />
-<meta name="viewport"
-	content="width=device-width, initial-scale:1.0, minimum-scale:1.0, maximum-scale:1.0" />
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control">
 </head>
 <body>
 
@@ -22,73 +22,66 @@
 				<p>Please register to use the Captcha API.</p>
 				<p>Once you are successfully signed up, you will be emailed with
 					public/private keys.</p>
+				<c:if test="${not empty response.username}">
+					<c:set var="userNameVal" value="${response.username}" />
+				</c:if>
 				<p>
-					<label for="id_username">Username</label><span style="color: red">*</span> <input
-						id="id_username" type="text" name="username" maxlength="255"
-						required="required" />
+					<label for="id_username">Username</label><span style="color: red">*</span> 
+					<input id="id_username" type="text" name="username" maxlength="255" required="required" value="${userNameVal }" />
 				</p>
 
 				<c:if test="${response.usernameError}">
-					<p>
-						<span style="color: red; position: relative; left: 90px;">Username
-							is invalid.</span>
-					</p>
+						<div style="color: red; margin-left: 164px; margin-top:-10px;" id="userErrMsg">Username is invalid.</div>
 				</c:if>
 
 				<p>
-					<label for="pass1">Password</label><span style="color: red">*</span> <input id="pass1"
-						type="password" name="password" maxlength="255"
-						required="required" />
+					<label for="pass1">Password</label><span style="color: red">*</span> 
+					<input id="pass1" type="password" name="password" maxlength="255" required="required" />
 				</p>
 				<c:if test="${response.passwordError}">
-					<p>
-						<span style="color: red; position: relative; left: 90px;">Password
-							is invalid.</span>
-					</p>
+						<div style="color: red; margin-left: 165px; margin-top: -10px;" id="passErrMsg">Password is invalid.</div>
 				</c:if>
 				<p>
-					<label for="pass2">Confirm Password</label><span style="color: red">*</span> <input
-						id="pass2" type="password" onkeyup="confirmPass(); return false;"
-						name="confrimpassword" maxlength="255" required="required" /> <span
-						id="confirmMessage" class="confirmMessage"></span>
+					<label for="pass2">Confirm Password</label><span style="color: red">*</span> 
+					<input id="pass2" type="password" onkeyup="confirmPass(); return false;" name="confrimpassword" maxlength="255" required="required" /> 
+					<span id="confirmMessage" class="confirmMessage"></span>
 				</p>
-
+				
+				<c:if test="${not empty response.emailId}">
+					<c:set var="emailIDVal" value="${response.emailId}" />
+				</c:if>
+				
 				<p>
-					<label for="id_email">Email</label> <span style="color: red">*</span><input
-						id="id_email" type="text" name="email" maxlength="255"
-						required="required" />
+					<label for="id_email">Email</label> <span style="color: red">*</span>
+					<input id="id_email" type="text" name="email" maxlength="255" required="required" value="${emailIDVal}" />
 				</p>
 				<c:if test="${response.emailIdError}">
-					<p>
-						<span style="color: red; position: relative; left: 90px;">Email
-							Id is invalid.</span>
-					</p>
+						<div style="color: red; margin-left: 165px; margin-top:-10px;" id="emaiIdErrMsg">Email Id is invalid.</div>
 				</c:if>
-
+				
+				<c:if test="${not empty response.companyName}">
+					<c:set var="companyNameVal" value="${response.companyName}" />
+				</c:if>
+				
 				<p>
-					<label for="id_website">Company Name</label><span style="color: red">*</span> <input
-						id="id_website" type="text" name="website" maxlength="255"
-						required="required" />
+					<label for="id_website">Company Name</label><span style="color: red">*</span> 
+					<input id="id_website" type="text" name="website" maxlength="255" required="required" value="${companyNameVal}" />
 				</p>
 				<c:if test="${response.companyError}">
-					<p>
-						<span style="color: red; position: relative; left: 90px;">Company
-							Name is invalid.</span>
-					</p>
+						<div style="color: red; margin-left: 165px; margin-top:-10px;" id="companyErrMsg">Company Name is invalid.</div>
 				</c:if>
-				<c:if test="${response.captchaError}">
-					<p>
-						<span style="color: red; position: relative; left: 90px;">Sorry,
-							the Picatcha you filled out was incorrect.</span>
-					</p>
-				</c:if>
+				
 				<p>
-					<label for="pixcaptcha">Captcha</label><span name="pixcaptcha">
-						<script type="text/javascript"
-							src="/imagecaptcha/resources/js/captcha.js"></script>
-						<link rel="stylesheet" type="text/css"
-							href="/imagecaptcha/resources/js/captcha.css" /> <script>
-								Picatcha.API_SERVER = 'http://192.168.1.5:8080';
+					
+					<label for="pixcaptcha">Captcha</label>
+					<c:if test="${response.captchaError}">
+						<div style="color: red; margin: -8px 0 10px 165px; ">Sorry, the captcha you filled out was incorrect.</div>
+					</c:if>
+				
+					<span name="pixcaptcha">
+						<script type="text/javascript" src="/imagecaptcha/resources/js/captcha.js"></script>
+							<script>
+								Picatcha.API_SERVER = 'http://192.168.1.215:8080';
 								Picatcha.PUBLIC_KEY = 'test';
 								Picatcha.NOISE_TYPE = '0';
 								Picatcha.NOISE_LEVEL = '5';
@@ -141,14 +134,14 @@
 							});
 							$('#id_username')
 									.after(
-											$('<div id="usernameMessage" style="margin-left:150px; display:none;" />'));
+											$('<div id="usernameMessage" style="margin-left:160px; display:none;" />'));
 
 							$('#id_email').blur(function() {
 								echeck();
 							});
 							$('#id_email')
 									.after(
-											$('<div id="emailMessage" style="margin-left:150px; display:none;" />'));
+											$('<div id="emailMessage" style="margin-left:160px; display:none;" />'));
 
 							$('#pass1').blur(function() {
 								checkPass();
@@ -156,7 +149,7 @@
 
 							$('#pass1')
 									.after(
-											$('<div id="passMessage" style="margin-left:150px; display:none;" />'));
+											$('<div id="passMessage" style="margin-left:160px; display:none;" />'));
 
 							$("#signup_form").submit(
 									function(event) {
@@ -174,6 +167,7 @@
 		function checkIdAvailability() {
 			var username = $('#id_username').val();
 			var mesg = $('#usernameMessage');
+			var mesg1 = $('#userErrMsg');
 			if (username != 'Example: Sampada' && username != '') {
 				$.ajax({
 					url : "/imagecaptcha/check_username/",
@@ -184,13 +178,15 @@
 					success : function(data) {
 						//mesg.css('display','block');
 						if (data.code == 'invalid-username') {
-							mesg.css('color', '#FF6666').html(
-									'Invalid username, Please Choose Another')
+							mesg.css('color', 'red').html(
+									'Invalid username, please choose another.')
 									.slideDown();
+							mesg1.css('display', 'none').slideUp();
 						} else if (data.taken) {
-							mesg.css('color', '#FF6666').html(
-									'Username Taken, Please Choose Another')
+							mesg.css('color', 'red').html(
+									'Username Taken, please choose another.')
 									.slideDown();
+							mesg1.css('display', 'none').slideUp();
 						} else {
 							//mesg.css('color','green').html('Username Available');
 							mesg.css('display', 'none').slideUp();
@@ -206,11 +202,13 @@
 		function checkPass() {
 			var ck_password = /^[A-Za-z0-9!@#$%^&*()_]{6,20}$/;
 			var pass1 = document.getElementById('pass1');
+			var mesg1 = $('#passErrMsg');
 			if (pass1.value != '') {
 				var message = $('#passMessage');
 				if (!ck_password.test(pass1.value)) {
-					message.css('color', '#FF6666').html(
+					message.css('color', 'red').html(
 							'Please enter a valid Password.').slideDown();
+					mesg1.css('display', 'none').slideUp();
 				} else {
 					message.css('display', 'none').slideUp();
 				}
@@ -225,7 +223,7 @@
 			var message = document.getElementById('confirmMessage');
 			//Set the colors we will be using ...
 			var goodColor = "#66cc66";
-			var badColor = "#ff6666";
+			var badColor = "red";
 			//Compare the values in the password field
 			//and the confirmation field
 			if (pass1.value == pass2.value) {
@@ -248,6 +246,7 @@
 		function echeck() {
 			var emailID = document.getElementById('id_email');
 			var message = $('#emailMessage');
+			var mesg1 = $('#emaiIdErrMsg');
 			var str = emailID.value;
 			if (str != 'Example: Sampada'
 					&& str != 'Example: sampada@captcha.com') {
@@ -281,8 +280,9 @@
 					error = 'error';
 				}
 				if (error == 'error') {
-					message.css('color', '#FF6666').html('Invalid E-mail ID')
+					message.css('color', 'red').html('Email ID is Invalid.')
 							.slideDown();
+					mesg1.css('display', 'none').slideUp();
 				} else {
 					message.css('display', 'none').slideUp();
 				}

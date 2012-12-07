@@ -39,6 +39,14 @@ public class CaptchaSignupController {
 				DateFormat.LONG, locale);
 
 		String formattedDate = dateFormat.format(date);
+		boolean ismobile = false;
+		if (request.getHeader("User-Agent").toLowerCase().contains("ipad")) {
+		} else if (request.getHeader("User-Agent").toLowerCase()
+				.contains("nexus")
+				|| request.getHeader("User-Agent").toLowerCase()
+						.contains("iphone")) {
+			ismobile = true;
+		}
 
 		model.addAttribute("serverTime", formattedDate);
 		String action = request.getParameter("action");
@@ -65,8 +73,9 @@ public class CaptchaSignupController {
 				response.setUsernameError(true);
 			}
 			if (password == null || password.isEmpty()
-					|| !password.equals(confirmPassword)) {
-				response.setUsernameError(true);
+					|| !password.equals(confirmPassword)
+					|| !isValidPassword(password)) {
+				response.setPasswordError(true);
 			}
 			if (emailId == null || emailId.isEmpty()
 					|| emailId.equalsIgnoreCase("Example: sampada@captcha.com")
@@ -79,8 +88,13 @@ public class CaptchaSignupController {
 			}
 			model.addAttribute("response", response);
 			if (response.getUsernameError() || response.getCaptchaError()
-					|| response.getEmailIdError()) {
-				return "signup";
+					|| response.getEmailIdError()
+					|| response.getPasswordError()) {
+				if (ismobile) {
+					return "signup_mobile";
+				} else {
+					return "signup";
+				}
 			} else {
 				try {
 					SessionFactory sessionFactory = new Configuration()
@@ -112,9 +126,19 @@ public class CaptchaSignupController {
 				return "success";
 			}
 		} else {
-			return "signup";
+			if (ismobile) {
+				return "signup_mobile";
+			} else {
+				return "signup";
+			}
 		}
 
+	}
+
+	private boolean isValidPassword(String password) {
+		Pattern pattern = Pattern.compile("^[A-Za-z0-9!@#$%^&*()_]{6,20}$");
+		Matcher matcher = pattern.matcher(password);
+		return matcher.matches();
 	}
 
 	private static boolean isValidEmail(String email) {
